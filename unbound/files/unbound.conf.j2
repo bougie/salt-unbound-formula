@@ -1,0 +1,13 @@
+#
+# See the unbound.conf(5) man page.
+#
+server:
+    # The following line will configure unbound to perform cryptographic
+    # DNSSEC validation using the root trust anchor.
+    auto-trust-anchor-file: "/var/lib/unbound/root.key"
+{% for ifx in config.interfaces %}
+    interface: {{ifx}}
+{%- endfor %}
+{% for acl in config.acls %}
+    access-control: {{acl}}
+{%- endfor %}

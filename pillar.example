@@ -1,0 +1,5 @@
+unbound:
+	interfaces:
+		- 8.8.8.8
+	lookup:
+		config_file: /usr/local/etc/unbound/unbound.conf
