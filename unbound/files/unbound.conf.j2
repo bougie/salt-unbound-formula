@@ -47,3 +47,15 @@ stub-zone:
         {%- endfor %}
     {% endfor %}
 {%- endif -%}
+{%- if config.forwardzones is defined %}
+    {% for zonename, options in config.forwardzones.items() %}
+#
+# {{zonename}} forward-zone section
+#
+forward-zone:
+    name: {{zonename}}
+        {%- for option_name, option_value in options.items() %}
+    {{option_name}}: {{option_value}}
+        {%- endfor %}
+    {% endfor %}
+{%- endif -%}

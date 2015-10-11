@@ -10,5 +10,8 @@ unbound:
     stubzones:
         domain.tld:
             stub-addr: 8.8.4.4
+    forwardzones:
+        domain2.tld:
+            stub-addr: 8.8.4.4
     lookup:
         config_file: /usr/local/etc/unbound/unbound.conf
