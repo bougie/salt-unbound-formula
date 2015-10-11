@@ -2,6 +2,8 @@ unbound:
     server:
         interfaces:
             - 8.8.8.8
+        domains_insecure:
+            - domain.tld
     stubzones:
         domain.tld:
             stub-addr: 8.8.4.4

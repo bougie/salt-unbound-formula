@@ -23,6 +23,12 @@ server:
     access-control: {{acl}}
     {%- endfor %}
 {%- endif -%}
+{%- if config.server.domains_insecure is defined %}
+    # domain-insecure
+    {%- for domain in config.server.domains_insecure %}
+    domain-insecure: {{domain}}
+    {%- endfor %}
+{%- endif -%}
 {%- if config.stubzones is defined %}
     {% for zonename, options in config.stubzones.items() %}
 #
