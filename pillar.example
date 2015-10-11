@@ -4,6 +4,8 @@ unbound:
             - 8.8.8.8
         domains_insecure:
             - domain.tld
+        local_zones:
+            - domain.tld
         options:
             # an option is config settings which can't have multiple clauses
             <option_name>: <option_value>
