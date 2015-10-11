@@ -29,6 +29,12 @@ server:
     domain-insecure: {{domain}}
     {%- endfor %}
 {%- endif -%}
+{%- if config.server.options is defined %}
+    # some config options
+    {%- for option_name, option_value in config.server.options.items() %}
+    {{option_name}}: {{option_value}}
+    {%- endfor %}
+{%- endif -%}
 {%- if config.stubzones is defined %}
     {% for zonename, options in config.stubzones.items() %}
 #

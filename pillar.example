@@ -4,6 +4,9 @@ unbound:
             - 8.8.8.8
         domains_insecure:
             - domain.tld
+        options:
+            # an option is config settings which can't have multiple clauses
+            <option_name>: <option_value>
     stubzones:
         domain.tld:
             stub-addr: 8.8.4.4
