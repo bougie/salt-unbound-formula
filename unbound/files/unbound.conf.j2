@@ -13,25 +13,25 @@ server:
     auto-trust-anchor-file: "/var/lib/unbound/root.key"
 {%- if config.server.interfaces is defined %}
     # interfaces
-	{%- for ifx in config.server.interfaces %}
+    {%- for ifx in config.server.interfaces %}
     interface: {{ifx}}
-	{%- endfor %}
+    {%- endfor %}
 {%- endif -%}
 {%- if config.server.acls is defined %}
     # ACLS
-	{%- for acl in config.server.acls %}
+    {%- for acl in config.server.acls %}
     access-control: {{acl}}
-	{%- endfor %}
+    {%- endfor %}
 {%- endif -%}
 {%- if config.stubzones is defined %}
-	{% for zonename, options in config.stubzones.items() %}
+    {% for zonename, options in config.stubzones.items() %}
 #
 # {{zonename}} stub-zone section
 #
 stub-zone:
-	name: {{zonename}}
-		{%- for option_name, option_value in options.items() %}
-	{{option_name}}: {{option_value}}
-		{%- endfor %}
-	{% endfor %}
+    name: {{zonename}}
+        {%- for option_name, option_value in options.items() %}
+    {{option_name}}: {{option_value}}
+        {%- endfor %}
+    {% endfor %}
 {%- endif -%}
