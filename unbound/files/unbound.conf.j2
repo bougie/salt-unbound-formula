@@ -5,13 +5,22 @@ server:
     # The following line will configure unbound to perform cryptographic
     # DNSSEC validation using the root trust anchor.
     auto-trust-anchor-file: "/var/lib/unbound/root.key"
-{% if config.interfaces is defined %}
-	{% for ifx in config.interfaces %}
+{% if config.server.interfaces is defined %}
+	{% for ifx in config.server.interfaces %}
     interface: {{ifx}}
 	{%- endfor %}
 {% endif %}
-{% if config.acls is defined %}
-	{% for acl in config.acls %}
+{% if config.server.acls is defined %}
+	{% for acl in config.server.acls %}
     access-control: {{acl}}
+	{%- endfor %}
+{% endif %}
+{% if config.stubzones is defined %}
+	{% for zonename, options in config.stubzones.items() %}
+stub-zone:
+	name: {{zonename}}
+		{% for option_name, option_value in options.items() %}
+	{{option_name}}: {{option_value}}
+		{%- endfor %}
 	{%- endfor %}
 {% endif %}
