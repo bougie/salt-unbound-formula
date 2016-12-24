@@ -7,6 +7,10 @@ Debian:
     package: unbound
     service: unbound
     config_file: /etc/unbound/unbound.conf
+Ubuntu:
+    package: unbound
+    service: unbound
+    config_file: /etc/unbound/unbound.conf
 {% endload %}
 
 {% load_yaml as rawmap %}
