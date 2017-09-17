@@ -1,9 +1,16 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+
 {% load_yaml as lookup %}
+Debian:
+    package: unbound
+    service: unbound
+    config_file: /etc/unbound/unbound.conf
 FreeBSD:
     package: unbound
     service: unbound
     config_file: /usr/local/etc/unbound/unbound.conf
-Debian:
+RedHat:
     package: unbound
     service: unbound
     config_file: /etc/unbound/unbound.conf

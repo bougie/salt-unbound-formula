@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+# vim: ft=sls
+
 # Meta-state to fully install unbound.
 
 include:
