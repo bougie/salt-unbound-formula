@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 # vim: ft=sls
 
-{% from "unbound/defaults.yaml" import lookup, rawmap with context %}
-{% set lookup = salt['grains.filter_by'](lookup, grain='os', merge=salt['pillar.get']('unbound:lookup')) %}
+{% from slspath+"/map.jinja" import unbound with context %}
 
 unbound_service:
     service:
         - running
-        - name: {{lookup.service}}
+        - name: {{unbound.service}}
 
 {% if salt['grains'].get('os') == 'Ubuntu' -%}
 unbound_defaults:
@@ -17,7 +16,7 @@ unbound_defaults:
         - user: root
         - group: root
         - mode: 644
-        - source: salt://unbound/files/default.jinja
+        - source: salt://{{slspath}}/files/default.jinja
         - require_in:
             - service: unbound_service
 {%- endif -%}
