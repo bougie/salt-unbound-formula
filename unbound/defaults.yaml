@@ -1,21 +1,13 @@
 # -*- coding: utf-8 -*-
 # vim: ft=yaml
 
-Arch: {}
-Debian:
-    package: unbound
-    service: unbound
-    config_file: /etc/unbound/unbound.conf
-FreeBSD:
-    package: unbound
-    service: unbound
-    config_file: /usr/local/etc/unbound/unbound.conf
-RedHat:
-    package: unbound
-    service: unbound
-    config_file: /etc/unbound/unbound.conf
-Ubuntu:
-    package: unbound
-    service: unbound
-    config_file: /etc/unbound/unbound.conf
-Suse: {}
+---
+unbound:
+  server:
+    interfaces:
+      - 0.0.0.0
+      - ::0
+      acls:
+        - 10.0.0.0/8 allow
+        - 172.16.0.0/12 allow
+        - 192.168.0.0/16 allow
