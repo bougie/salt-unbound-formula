@@ -25,7 +25,7 @@ unbound:
             - key: forward-addr
               value: 8.8.4.4
     lookup:
-        config_file: /usr/local/etc/unbound/unbound.conf
+        config_file: /usr/local/etc/unbound/unbound.conf #only if you don't want the default location
 
 Full JSON Example:
 
