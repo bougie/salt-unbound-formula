@@ -1,0 +1,21 @@
+# -*- coding: utf-8 -*-
+# vim: ft=jinja
+
+{% import_yaml slspath+"/defaults.yaml" as defaults %}
+{% import_yaml slspath+"/osmap.yaml" as osmap %}
+{% import_yaml slspath+"/codenamemap.yaml" as codemap %}
+
+{# get the settings for the os_family grain #}
+{% set osfam = salt['grains.filter_by'](osmap) or {} %}
+
+{# get the settings for the oscodename grain, os_family data will override oscodename data #}
+{% set oscode = salt['grains.filter_by'](codemap, grain='oscodename', merge=osfam) or {} %}
+
+{# merge the os family/codename specific data over the defaults #}
+{% do defaults.unbound.update(oscode) %}
+
+{# merge the pillar:lookup dict into the defaults/os specific dict #}
+{% set lookup = salt['pillar.get']('unbound:lookup', default=defaults.unbound, merge=True) %}
+
+{# merge the actual unbound pillar into the above combined dict #}
+{% set unbound = salt['pillar.get']('unbound', default=lookup, merge=True) %}

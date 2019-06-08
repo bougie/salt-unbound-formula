@@ -1,0 +1,13 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+
+---
+unbound:
+  server:
+    acls:
+      - "10.0.0.0/8 allow"
+      - "172.16.0.0/12 allow"
+      - "192.168.0.0/16 allow"
+    interfaces:
+      - "0.0.0.0"
+      - "::0"

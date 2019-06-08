@@ -8,12 +8,184 @@ unbound:
             - domain.tld
         options:
             # an option is config settings which can't have multiple clauses
-            <option_name>: <option_value>
+            - key: <option_name>
+              value: <option_value>
     stubzones:
-        domain.tld:
-            stub-addr: 8.8.4.4
+        - zonename: domain.tld:
+          options:
+            - key: stub-addr
+              value: 8.8.8.8
+            - key: stub-addr
+              value: 8.8.4.4
     forwardzones:
-        domain2.tld:
-            stub-addr: 8.8.4.4
+        - zonename: domain2.tld:
+          options:
+            - key: forward-addr
+              value: 8.8.8.8
+            - key: forward-addr
+              value: 8.8.4.4
     lookup:
         config_file: /usr/local/etc/unbound/unbound.conf
+
+Full JSON Example:
+
+{
+    "unbound" : {
+        "server" : {
+            "private_domains" : [
+                "pcdummy.lan",
+                "mlab.pcdummy.lan",
+                "lxch.lan"
+            ],
+            "private_addresses" : [
+                "172.16.0.0/12",
+                "192.168.0.0/16",
+                "169.254.0.0/16",
+                "fd00::/8",
+                "fe80::/10",
+                "10.0.0.0/8",
+                "::ffff:0:0/96"
+            ],
+            "options" : [
+                {
+                    "value" : "yes",
+                    "key" : "use-syslog"
+                },
+                {
+                    "value" : "1",
+                    "key" : "verbosity"
+                },
+                {
+                    "value" : "yes",
+                    "key" : "hide-identity"
+                },
+                {
+                    "value" : "yes",
+                    "key" : "hide-version"
+                },
+                {
+                    "value" : "yes",
+                    "key" : "harden-glue"
+                },
+                {
+                    "value" : "yes",
+                    "key" : "harden-dnssec-stripped"
+                },
+                {
+                    "value" : "yes",
+                    "key" : "use-caps-for-id"
+                },
+                {
+                    "value" : "4",
+                    "key" : "num-threads"
+                },
+                {
+                    "value" : "8",
+                    "key" : "msg-cache-slabs"
+                },
+                {
+                    "value" : "8",
+                    "key" : "rrset-cache-slabs"
+                },
+                {
+                    "value" : "8",
+                    "key" : "infra-cache-slabs"
+                },
+                {
+                    "value" : "8",
+                    "key" : "key-cache-slabs"
+                },
+                {
+                    "value" : "256m",
+                    "key" : "rrset-cache-size"
+                },
+                {
+                    "value" : "128m",
+                    "key" : "msg-cache-size"
+                },
+                {
+                    "value" : "1m",
+                    "key" : "so-rcvbuf"
+                },
+                {
+                    "value" : "10000",
+                    "key" : "unwanted-reply-threshold"
+                }
+            ],
+            "interfaces" : [
+                "127.0.0.1",
+                "::1",
+                "10.167.160.18",
+                "fd57:c87d:f1ee:ee00:f::18"
+            ],
+            "domains_insecure" : [
+                "pcdummy.lan",
+                "mlab.pcdummy.lan",
+                "lxch.lan"
+            ],
+            "acls" : [
+                "127.0.0.1/8 allow",
+                "::1 allow",
+                "10.0.0.0/8 allow",
+                "192.168.0.0/16 allow",
+                "fd57:c87d:f1ee::/48 allow"
+            ]
+        },
+        "forwardzones" : [
+            {
+                "zonename" : ".",
+                "options" : [
+                    {
+                        "value" : "2001:4860:4860::8888",
+                        "key" : "forward-addr"
+                    },
+                    {
+                        "value" : "2001:4860:4860::8844",
+                        "key" : "forward-addr"
+                    }
+                ]
+            }
+        ],
+        "stubzones" : [
+            {
+                "zonename" : "pcdummy.lan",
+                "options" : [
+                    {
+                        "value" : "10.167.160.2",
+                        "key" : "stub-addr"
+                    },
+                    {
+                        "value" : "fd57:c87d:f1ee:ee01:f::2",
+                        "key" : "stub-addr"
+                    }
+                ]
+            },
+            {
+                "zonename" : "mlab.pcdummy.lan",
+                "options" : [
+                    {
+                        "value" : "10.167.160.2",
+                        "key" : "stub-addr"
+                    },
+                    {
+                        "value" : "fd57:c87d:f1ee:ee01:f::2",
+                        "key" : "stub-addr"
+                    }
+                ]
+            },
+            {
+                "zonename" : "lxch.lan",
+                "options" : [
+                    {
+                        "value" : "10.128.2.9",
+                        "key" : "stub-addr"
+                    },
+                    {
+                        "value" : "fd57:c87d:f1ee:2::9",
+                        "key" : "stub-addr"
+                    }
+                ]
+            }
+        ]
+    }
+}
