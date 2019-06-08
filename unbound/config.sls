@@ -12,4 +12,4 @@ unbound_config:
         - group: root
         - mode: 0440
         - context:
-            config: {{unbound}}
+            config: {{unbound | json }}
