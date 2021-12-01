@@ -1,191 +1,114 @@
+# vim: ft=yaml
+---
+## Config reference: https://man.openbsd.org/unbound.conf
+## Example: https://github.com/NLnetLabs/unbound/blob/master/doc/example.conf.in
+
 unbound:
-    server:
-        interfaces:
-            - 8.8.8.8
-        domains_insecure:
-            - domain.tld
-        local_zones:
-            - domain.tld
-        options:
-            # an option is config settings which can't have multiple clauses
-            - key: <option_name>
-              value: <option_value>
-    stubzones:
-        - zonename: domain.tld:
-          options:
-            - key: stub-addr
-              value: 8.8.8.8
-            - key: stub-addr
-              value: 8.8.4.4
-    forwardzones:
-        - zonename: domain2.tld:
-          options:
-            - key: forward-addr
-              value: 8.8.8.8
-            - key: forward-addr
-              value: 8.8.4.4
-    lookup:
-        config_file: /usr/local/etc/unbound/unbound.conf #only if you don't want the default location
+  # Use `lookup` to override default config values
+  #   (such as those found in snmp/map.jinja)
+  lookup:
+    config_file: /usr/local/etc/unbound/unbound.conf
 
-Full JSON Example:
+  # ref: https://man.openbsd.org/unbound.conf#Server_Options
+  server:
+    # ref: https://man.openbsd.org/unbound.conf#interface:
+    # `interface`  : Interface to use to connect to the network. This interface
+    #                is listened to for queries from clients, and answers to 
+    #                clients are given from it.
+    #interface:
+    #  - (IP[@port])
+    interface:
+      - 192.0.2.153
+      - 192.0.2.154
+      - 192.0.2.154@5003
+      - 2001:DB8::5
+    # ref: https://man.openbsd.org/unbound.conf#domain
+    # `domain-insecure`  : Sets domain name to be insecure, DNSSEC chain of 
+    #                      trust is ignored towards the domain name.
+    #                      (SALT: swapped '-' for '_' to conform to salt syntax)
+    #domain_insecure:
+    #  - (domain.tld)
+    domain_insecure:
+      - example.com
+      - companyname.local
+    # ref: https://man.openbsd.org/unbound.conf#local
+    # `local-zone`  : Configure a local zone. The type determines the answer to
+    #                 give if there is no match from local-data.
+    #                 (SALT: swapped '-' for '_' to conform to salt syntax)
+    #local_zone:
+    #  - (domain.tld)
+    local_zone:
+      - localhost
+      - 10.in-addr.arpa
+    
+    # Miscellaneous options
+    do-ipv6: no
+    chroot: '""'
+    harden-dnssec-stripped: no
+    module-config: iterator
 
-{
-    "unbound" : {
-        "server" : {
-            "private_domains" : [
-                "pcdummy.lan",
-                "mlab.pcdummy.lan",
-                "lxch.lan"
-            ],
-            "private_addresses" : [
-                "172.16.0.0/12",
-                "192.168.0.0/16",
-                "169.254.0.0/16",
-                "fd00::/8",
-                "fe80::/10",
-                "10.0.0.0/8",
-                "::ffff:0:0/96"
-            ],
-            "options" : [
-                {
-                    "value" : "yes",
-                    "key" : "use-syslog"
-                },
-                {
-                    "value" : "1",
-                    "key" : "verbosity"
-                },
-                {
-                    "value" : "yes",
-                    "key" : "hide-identity"
-                },
-                {
-                    "value" : "yes",
-                    "key" : "hide-version"
-                },
-                {
-                    "value" : "yes",
-                    "key" : "harden-glue"
-                },
-                {
-                    "value" : "yes",
-                    "key" : "harden-dnssec-stripped"
-                },
-                {
-                    "value" : "yes",
-                    "key" : "use-caps-for-id"
-                },
-                {
-                    "value" : "4",
-                    "key" : "num-threads"
-                },
-                {
-                    "value" : "8",
-                    "key" : "msg-cache-slabs"
-                },
-                {
-                    "value" : "8",
-                    "key" : "rrset-cache-slabs"
-                },
-                {
-                    "value" : "8",
-                    "key" : "infra-cache-slabs"
-                },
-                {
-                    "value" : "8",
-                    "key" : "key-cache-slabs"
-                },
-                {
-                    "value" : "256m",
-                    "key" : "rrset-cache-size"
-                },
-                {
-                    "value" : "128m",
-                    "key" : "msg-cache-size"
-                },
-                {
-                    "value" : "1m",
-                    "key" : "so-rcvbuf"
-                },
-                {
-                    "value" : "10000",
-                    "key" : "unwanted-reply-threshold"
-                }
-            ],
-            "interfaces" : [
-                "127.0.0.1",
-                "::1",
-                "10.167.160.18",
-                "fd57:c87d:f1ee:ee00:f::18"
-            ],
-            "domains_insecure" : [
-                "pcdummy.lan",
-                "mlab.pcdummy.lan",
-                "lxch.lan"
-            ],
-            "acls" : [
-                "127.0.0.1/8 allow",
-                "::1 allow",
-                "10.0.0.0/8 allow",
-                "192.168.0.0/16 allow",
-                "fd57:c87d:f1ee::/48 allow"
-            ]
-        },
-        "forwardzones" : [
-            {
-                "zonename" : ".",
-                "options" : [
-                    {
-                        "value" : "2001:4860:4860::8888",
-                        "key" : "forward-addr"
-                    },
-                    {
-                        "value" : "2001:4860:4860::8844",
-                        "key" : "forward-addr"
-                    }
-                ]
-            }
-        ],
-        "stubzones" : [
-            {
-                "zonename" : "pcdummy.lan",
-                "options" : [
-                    {
-                        "value" : "10.167.160.2",
-                        "key" : "stub-addr"
-                    },
-                    {
-                        "value" : "fd57:c87d:f1ee:ee01:f::2",
-                        "key" : "stub-addr"
-                    }
-                ]
-            },
-            {
-                "zonename" : "mlab.pcdummy.lan",
-                "options" : [
-                    {
-                        "value" : "10.167.160.2",
-                        "key" : "stub-addr"
-                    },
-                    {
-                        "value" : "fd57:c87d:f1ee:ee01:f::2",
-                        "key" : "stub-addr"
-                    }
-                ]
-            },
-            {
-                "zonename" : "lxch.lan",
-                "options" : [
-                    {
-                        "value" : "10.128.2.9",
-                        "key" : "stub-addr"
-                    },
-                    {
-                        "value" : "fd57:c87d:f1ee:2::9",
-                        "key" : "stub-addr"
-                    }
-                ]
-            }
-        ]
-    }
-}
+  # ref: https://man.openbsd.org/unbound.conf#Stub_Zone_Options
+  # `stub-zone`  : The stub zone can be used to configure authoritative data 
+  #                to be used by the resolver that cannot be accessed using 
+  #                the public internet servers.
+  #                (SALT: swapped '-' for '_' to conform to salt syntax)
+  #                (SALT: directives with a DEFAULT are optional)
+  #stub_zone:
+  #  - name: (domain.tld)          # Name of the stub zone
+  #    stub_host: (domain.tld)     # Name of stub zone nameserver. Is itself resolved before it is used
+  #    stub_addr: (IP[@port])      # IP address of stub zone nameserver
+  #                                  (SALT: `stub_addr` supports lists)
+  #    stub_prime: {yes|no}        # If enabled it performs NS set priming, which is similar to root hints, 
+  #                                  where it starts using the list of nameservers currently published by the zone
+  #                                  DEFAULT: no
+  #    stub_first: {yes|no}        # If enabled, a query is attempted without the stub clause if it fails
+  #                                  DEFAULT: no
+  #    stub_tls_upstream: {yes|no} # Enabled or disable whether the queries to this stub use TLS for transport
+  #                                  DEFAULT: no
+  #    stub_ssl_upstream: {yes|no} # Alternate syntax for stub_tls_upstream
+  #                                  DEFAULT: no
+  #    stub_no_cache: {yes|no}     # If enabled, data inside the stub is not cached
+  #                                  DEFAULT: no
+  stub_zone:
+    - name: example.com
+      stub_addr: 192.0.2.68
+      stub_prime: no
+      stub_first: no
+      stub_tcp_upstream: no
+      stub_tls_upstream: no
+      stub_no_cache: no
+    - name: example.org
+      stub_addr:
+        - 192.0.2.54
+        - 192.0.2.55@5003
+
+  # ref: https://man.openbsd.org/unbound.conf#Forward_Zone_Options
+  # `forward-zone`  : For the forward zone this list of nameservers is used to forward the queries
+  #                   (SALT: swapped '-' for '_' to conform to salt syntax)
+  #                   (SALT: directives with a DEFAULT are optional)
+  #forward_zone:
+  #  - name: (domain.tld)              # Name of the forward zone
+  #    forward_host: (domain.tld)      # Name of server to forward to. Is itself resolved before it is used
+  #    forward_addr: (IP[@port])       # IP address of server to which reuqests are forwarded
+  #                                      (SALT: `forward_addr` supports lists)
+  #    forward_first: {yes|no}         # If a forwarded query is met with a SERVFAIL error, and this option 
+  #                                      is enabled, unbound will fall back to normal recursive resolution 
+  #                                      for this query as if no query forwarding had been specified
+  #                                      DEFAULT: no
+  #    forward_tls_upstream: {yes|no}  # Enabled or disable whether the queries to this forwarder use TLS for transport
+  #                                      DEFAULT: no
+  #    forward_ssl_upstream: {yes|no}  # Alternate syntax for forward_tls_upstream
+  #                                      DEFAULT: no
+  #    forward_no_cache: {yes|no}      # If enabled, data inside the forward is not cached
+  #                                      DEFAULT: no
+  forward_zone:
+    - name: example.com
+      forward-addr: 192.10.3.68
+      forward-first: no
+      forward-tcp-upstream: no
+      forward-tls-upstream: no
+      forward-no-cache: no
+    - name: example.org
+      forward_addr:
+        - 192.10.3.54
+        - 192.10.3.55@5004
