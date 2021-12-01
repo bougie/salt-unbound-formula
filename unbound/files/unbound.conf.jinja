@@ -11,11 +11,6 @@
 ###############################################################################
 
 server:
-    # The following line will configure unbound to perform cryptographic
-    # DNSSEC validation using the root trust anchor.
-    auto-trust-anchor-file: {{ unbound.get('auto-trust-anchor-file') }}
-    {% do unbound.remove('auto-trust-anchor-file') %}
-
 {% for k,v in unbound.get('server').items()|sort(attribute='1.name') %}
     {%- if v is iterable %}
     {%- for i in v %}
@@ -26,8 +21,8 @@ server:
     {%- endif -%}
 {%- endfor %}
 
-{%- if config.stub_zone is defined %}
-{% for zone in config.stub_zone %}
+{%- if 'stub_zone' in unbound %}
+{% for zone in unbound['stub_zone'] %}
 stub-zone:
     name: "{{ zone.name }}"
     {% do zone.remove('name') %}
@@ -43,8 +38,8 @@ stub-zone:
 {%- endfor %}
 {%- endif -%}
 
-{%- if config.forward_zone is defined %}
-    {% for zone in config.forward_zone %}
+{%- if 'forward_zone' in unbound %}
+    {% for zone in unbound['forward_zone'] %}
 forward-zone:
     name: "{{ zone.name }}"
     {% do zone.remove('name') %}
