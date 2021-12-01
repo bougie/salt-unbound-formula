@@ -1,0 +1,24 @@
+# vim: ft=jinja
+
+{# used to ensure a value is printed correctly to the config file 
+	if value is an IP address or a number: print it as is
+	if value is literally yes or no, print them in string format (else it will print true/false)
+	else assume string and double quote wrap 
+	#}
+{%- macro safe_print(value) -%}
+  {%- if value|is_ip or value|number -%}
+{{ value }}
+  {%- elif value|string in ['yes', 'no'] -%}
+{{ value|string }}
+  {% else -%}
+"{{ value }}"
+  {%- endif -%}
+{%- endmacro -%}
+
+{# convert underscores by to hyphens 
+       (salt safe)   (actual unbound opt) 
+    domain_insecure -> domain-insecure
+	#}
+{%- macro directive(key) -%}
+{{ key|replace('_', '-') }}
+{%- endmacro -%}
