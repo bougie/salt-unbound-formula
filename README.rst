@@ -2,7 +2,7 @@
 Unbound
 =======
 
-Install the unbound resolver as a server.
+Install the unbound resolver as a service.
 
 .. note::
 
