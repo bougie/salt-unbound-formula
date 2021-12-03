@@ -10,7 +10,7 @@
 ###############################################################################
 
 server:
-{% for k,v in config.get('server').items()|sort(attribute='1.name') %}
+{% for k,v in config.get('server').items() %}
     {%- if v is iterable %}
     {%- for i in v %}
     {{ directive(k) }}: {{ safe_print(v) }}
