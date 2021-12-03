@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim: ft=sls
 
-{% from slspath+"/map.jinja" import unbound with context %}
+{% from "unbound/map.jinja" import unbound with context %}
 
 unbound_config:
   file.managed:
