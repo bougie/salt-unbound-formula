@@ -41,7 +41,7 @@ stub-zone:
     {% for zone in config['forward_zone'] %}
 forward-zone:
     name: "{{ zone.name }}"
-    {% do zone.remove('name') %}
+    {% do zone.pop('name') %}
 {% for k,v in zone.items() %}
     {%- if v is iterable %}
     {%- for i in v %}
