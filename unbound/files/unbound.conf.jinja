@@ -1,4 +1,3 @@
-{% from "unbound/map.jinja" import unbound with context -%}
 {% from "unbound/macros.jinja" import safe_print, directive -%}
 
 ###############################################################################
@@ -11,7 +10,7 @@
 ###############################################################################
 
 server:
-{% for k,v in unbound.get('server').items()|sort(attribute='1.name') %}
+{% for k,v in config.get('server').items()|sort(attribute='1.name') %}
     {%- if v is iterable %}
     {%- for i in v %}
     {{ directive(k) }}: {{ safe_print(v) }}
@@ -21,8 +20,8 @@ server:
     {%- endif -%}
 {%- endfor %}
 
-{%- if 'stub_zone' in unbound %}
-{% for zone in unbound['stub_zone'] %}
+{%- if 'stub_zone' in config %}
+{% for zone in config['stub_zone'] %}
 stub-zone:
     name: "{{ zone.name }}"
     {% do zone.remove('name') %}
@@ -38,8 +37,8 @@ stub-zone:
 {%- endfor %}
 {%- endif -%}
 
-{%- if 'forward_zone' in unbound %}
-    {% for zone in unbound['forward_zone'] %}
+{%- if 'forward_zone' in config %}
+    {% for zone in config['forward_zone'] %}
 forward-zone:
     name: "{{ zone.name }}"
     {% do zone.remove('name') %}
