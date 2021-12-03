@@ -13,7 +13,7 @@ server:
 {% for k,v in config.get('server').items() %}
     {%- if v is iterable %}
     {%- for i in v %}
-    {{ directive(k) }}: {{ safe_print(v) }}
+    {{ directive(k) }}: {{ safe_print(i) }}
     {%- endfor %}
     {%- else %}
     {{ directive(k) }}: {{ safe_print(v) }}
@@ -28,7 +28,7 @@ stub-zone:
 {% for k,v in zone.items() %}
     {%- if v is iterable %}
     {%- for i in v %}
-    {{ directive(k) }}: {{ safe_print(v) }}
+    {{ directive(k) }}: {{ safe_print(i) }}
     {%- endfor %}
     {%- else %}
     {{ directive(k) }}: {{ safe_print(v) }}
@@ -45,7 +45,7 @@ forward-zone:
 {% for k,v in zone.items() %}
     {%- if v is iterable %}
     {%- for i in v %}
-    {{ directive(k) }}: {{ safe_print(v) }}
+    {{ directive(k) }}: {{ safe_print(i) }}
     {%- endfor %}
     {%- else %}
     {{ directive(k) }}: {{ safe_print(v) }}
