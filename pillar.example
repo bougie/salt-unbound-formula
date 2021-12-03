@@ -5,7 +5,7 @@
 
 unbound:
   # Use `lookup` to override default config values
-  #   (such as those found in snmp/map.jinja)
+  #   (such as those found in unbound/map.jinja)
   lookup:
     config_file: /usr/local/etc/unbound/unbound.conf
 
