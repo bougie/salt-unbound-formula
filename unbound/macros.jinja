@@ -6,7 +6,7 @@
 	else assume string and double quote wrap 
 	#}
 {%- macro safe_print(value) -%}
-  {%- if value|is_ip or value|number -%}
+  {%- if value|is_ip or value is number -%}
 {{ value }}
   {%- elif value|string in ['yes', 'no'] -%}
 {{ value|string }}
