@@ -10,46 +10,31 @@
 ###############################################################################
 
 server:
-{% for k,v in config.get('server').items() %}
-    {%- if v is iterable and v is not string %}
-    {%- for i in v %}
-    {{ directive(k) }}: {{ safe_print(i) }}
-    {%- endfor %}
+{%- for k,v in config.get('server').items() -%}
+    {%- if v is iterable and v is not string -%}
+    {% for i in v %}
+    {{ directive(k) }}: {{ i }}
+    {%- endfor -%}
     {%- else %}
-    {{ directive(k) }}: {{ safe_print(v) }}
+    {{ directive(k) }}: {{ v }}
     {%- endif -%}
-{%- endfor %}
+{% endfor %}
 
-{%- if 'stub_zone' in config %}
-{% for zone in config['stub_zone'] %}
-stub-zone:
+{%- for z in ['stub_zone', 'forward_zone'] -%}
+{% if z in config %}
+{% for zone in config[z] %}
+{{ directive(z) }}:
     name: "{{ zone.name }}"
-    {% do zone.remove('name') %}
-{% for k,v in zone.items() %}
-    {%- if v is iterable and v is not string %}
-    {%- for i in v %}
-    {{ directive(k) }}: {{ safe_print(i) }}
-    {%- endfor %}
+{%- do zone.pop('name') -%}
+{%- for k,v in zone.items() -%}
+    {%- if v is iterable and v is not string -%}
+    {% for i in v %}
+    {{ directive(k) }}: {{ i }}
+    {%- endfor -%}
     {%- else %}
-    {{ directive(k) }}: {{ safe_print(v) }}
+    {{ directive(k) }}: {{ v }}
     {%- endif -%}
-{%- endfor %}
-{%- endfor %}
-{%- endif -%}
-
-{%- if 'forward_zone' in config %}
-    {% for zone in config['forward_zone'] %}
-forward-zone:
-    name: "{{ zone.name }}"
-    {% do zone.pop('name') %}
-{% for k,v in zone.items() %}
-    {%- if v is iterable and v is not string %}
-    {%- for i in v %}
-    {{ directive(k) }}: {{ safe_print(i) }}
-    {%- endfor %}
-    {%- else %}
-    {{ directive(k) }}: {{ safe_print(v) }}
-    {%- endif -%}
-{%- endfor %}
-{%- endfor %}
-{%- endif -%}
+{%- endfor -%}
+{%- endfor -%}
+{% endif %}
+{%- endfor -%}
