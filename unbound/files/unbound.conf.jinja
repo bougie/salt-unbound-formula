@@ -1,0 +1,40 @@
+{% from "unbound/macros.jinja" import safe_print, directive -%}
+
+###############################################################################
+#
+# DO NOT EDIT
+#
+# This file is managed by Salt via {{ source }}
+# Modify the config that generates this file instead
+#
+###############################################################################
+
+server:
+{%- for k,v in config.get('server').items() -%}
+    {%- if v is iterable and v is not string -%}
+    {% for i in v %}
+    {{ directive(k) }}: {{ i }}
+    {%- endfor -%}
+    {%- else %}
+    {{ directive(k) }}: {{ v }}
+    {%- endif -%}
+{% endfor %}
+
+{%- for z in ['stub_zone', 'forward_zone'] -%}
+{% if z in config %}
+{% for zone in config[z] %}
+{{ directive(z) }}:
+    name: "{{ zone.name }}"
+{%- do zone.pop('name') -%}
+{%- for k,v in zone.items() -%}
+    {%- if v is iterable and v is not string -%}
+    {% for i in v %}
+    {{ directive(k) }}: {{ i }}
+    {%- endfor -%}
+    {%- else %}
+    {{ directive(k) }}: {{ v }}
+    {%- endif -%}
+{%- endfor -%}
+{%- endfor -%}
+{% endif %}
+{%- endfor -%}

@@ -1,19 +1,17 @@
+# vim: ft=sls
+
 # Meta-state to fully install unbound.
 
-include:
-    - unbound.install
-    - unbound.config
-    - unbound.service
+{% from "unbound/map.jinja" import unbound with context %}
 
-extend:
-    unbound_service:
-        service:
-            - watch:
-                - file: unbound_config
-                - pkg: unbound_package
-            - require:
-                - file: unbound_config
-    unbound_config:
-        file:
-            - require:
-                - pkg: unbound_package
+unbound:
+  pkg.installed:
+    - name: {{ unbound.package }}
+  service.running:
+    - name: {{ unbound.service }}
+    - enable: true
+    - require:
+      - pkg: {{ unbound.package }}
+
+include:
+  - unbound.config

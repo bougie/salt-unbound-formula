@@ -1,0 +1,34 @@
+# vim: ft=jinja
+
+{% import_yaml "unbound/defaults.yaml" as unbound %}
+
+{% load_yaml as platform_specific %}
+Debian:
+  config_file: /etc/unbound/unbound.conf
+  package: unbound
+  service: unbound
+FreeBSD:
+  config_file: /usr/local/etc/unbound/unbound.conf
+  package: unbound
+  service: unbound
+RedHat:
+  config_file: /etc/unbound/unbound.conf
+  package: unbound
+  service: unbound
+Ubuntu:
+  config_file: /etc/unbound/unbound.conf
+  package: unbound
+  service: unbound
+{% endload %}
+
+{# get the settings for the os_family grain, merge them in (if found) #}
+{% set platform_addition = salt['grains.filter_by'](platform_specific, default='RedHat') %}
+{% if platform_addition %}
+  {% do unbound.update(platform_addition) %}
+{% endif %}
+
+{# merge the actual unbound pillar into the above combined dict #}
+{% set user_override = salt['pillar.get']('unbound', {}) %}
+{% if user_override %}
+  {% do unbound.update(user_override) %}
+{% endif %}
